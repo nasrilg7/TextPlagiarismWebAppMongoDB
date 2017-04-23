@@ -13,7 +13,7 @@ namespace TextPlagiarismWebApp.DataAccessLayer
         {
 
         }
-        public DbSet<Course> Courses { get; set; }
 
+        public DbSet<Course> Courses { get; set; }
     }
 }

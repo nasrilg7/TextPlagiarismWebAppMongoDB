@@ -29,21 +29,21 @@
         {
             <tr>
                 <td>
-                    @Html.ActionLink(item.courseId, "ManageCourse", new { id = item.courseId })
+                    @Html.ActionLink(item.Id, "ManageCourse", new { id = item.Id })
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.courseName)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.description)
+                    @Html.DisplayFor(modelItem => item.Description)
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.Hours)
                 </td>
                 <td style="width:180px; overflow:hidden">
-                    @Html.ActionLink("Edit", "Edit", new { id = item.courseId }) |
-                    @Html.ActionLink("Details", "Details", new { id = item.courseId }) |
-                    @Html.ActionLink("Delete", "Delete", new { id = item.courseId })
+                    @Html.ActionLink("Edit", "Edit", new { id = item.Id }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.Id }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.Id })
 
                 </td>
             </tr>

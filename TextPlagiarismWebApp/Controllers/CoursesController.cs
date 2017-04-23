@@ -25,20 +25,20 @@ namespace TextPlagiarismWebApp.Controllers
             var model =
                 (from c in db.Courses
                  where searchTerm == null ||
-                 c.courseId.StartsWith(searchTerm) ||
-                 c.courseName.StartsWith(searchTerm)
+                 c.Id.StartsWith(searchTerm) ||
+                 c.Name.StartsWith(searchTerm)
 
                  select new
                  {
-                     courseId = c.courseId,
-                     courseName = c.courseName,
-                     description = c.description,
+                     courseId = c.Id,
+                     courseName = c.Name,
+                     description = c.Description,
                      Hours = c.Hours
                  }).AsEnumerable().Select(c => new Course
                  {
-                     courseId = c.courseId,
-                     courseName = c.courseName,
-                     description = c.description,
+                     Id = c.courseId,
+                     Name = c.courseName,
+                     Description = c.description,
                      Hours = c.Hours
                  }).ToPagedList(page, 10);
 
@@ -79,7 +79,7 @@ namespace TextPlagiarismWebApp.Controllers
         [HttpPost]
         //[Filter.Filter(Roles = "admin, teacher")]
         [ValidateAntiForgeryToken]
-         public ActionResult Create([Bind(Include = "courseId,courseName,description,Hours")] Course course)
+         public ActionResult Create([Bind(Include = "Id,Name,Description,Hours")] Course course)
         {
             if (ModelState.IsValid)
             {
@@ -113,7 +113,7 @@ namespace TextPlagiarismWebApp.Controllers
         [HttpPost]
         //[Filter.Filter(Roles = "admin, owner")]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "courseId,courseName,description,Hours")] Course course)
+        public ActionResult Edit([Bind(Include = "Id,Name,Description,Hours")] Course course)
         {
             if (ModelState.IsValid)
             {
