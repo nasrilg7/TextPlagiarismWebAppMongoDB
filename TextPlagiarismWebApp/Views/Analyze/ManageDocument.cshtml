@@ -1,0 +1,17 @@
+﻿@model TextPlagiarismWebApp.Models.ViewModels.ManageDocumentViewModel
+
+@{
+    ViewBag.Title = "ManageDocument";
+}
+
+<h2>ManageDocument</h2>
+
+    @Html.Action("GetHtmlPage", "Upload", new { path = Model.documentPath })
+
+<script  type="text/javascript">
+    sen = @Model.sentence["sentence"].AsString.ToString();
+    $("body").html(function (_, innerHTML) {
+        var regex = new RegExp("(" + sen + ")", "g");
+        return innerHTML.replace(/\s\s+/g, ' ').replace(/\r?\n|\r/g, '').replace(regex, '<span style="background-color:#FFFF00">$1</span>');
+    });
+</script>

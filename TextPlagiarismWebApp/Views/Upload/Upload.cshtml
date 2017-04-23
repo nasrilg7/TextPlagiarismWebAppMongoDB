@@ -1,0 +1,19 @@
+﻿@model TextPlagiarismWebApp.Models.Document
+@{
+    ViewBag.Title = "Document";
+}
+
+<h2>@ViewBag.Title: @ViewBag.Name</h2>
+<h6>
+    @using (Html.BeginForm("Analyze", "Analyze", new { id = @Model.Id, path = Model.path}))
+    {
+
+        <input type="submit" value="Analyze"/>
+
+    }  
+</h6>
+
+<br />
+<br />
+@Html.Action("GetHtmlPage", "Upload", new { path = Model.path })
+

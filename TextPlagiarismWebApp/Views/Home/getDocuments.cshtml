@@ -1,0 +1,27 @@
+﻿@model TextPlagiarismWebApp.Models.ViewModels.DocumentsViewModel
+
+@{
+    ViewBag.Title = "getDocuments";
+}
+
+<h2>getDocuments</h2>
+<body>
+    Hello!
+    <hr />
+    <div>
+        <table>
+            <tr>
+                <th>ID</th>
+                <th>Document</th>
+            </tr>
+            @foreach (var item in Model.Documents)
+            {
+                <tr>
+                    <td>@item.Id</td>
+                    <td>@Html.Encode(@item.document)</td>
+                </tr>
+            }
+        </table>
+    </div>
+</body>
+

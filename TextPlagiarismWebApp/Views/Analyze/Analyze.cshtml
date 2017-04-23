@@ -1,0 +1,37 @@
+﻿@model IEnumerable<TextPlagiarismWebApp.Models.ViewModels.SentenceMatchingViewModel>
+
+@{
+    ViewBag.Title = "Analyze";
+}
+
+<h2>Analyze: Document @ViewBag.Id</h2>
+<h4 style="font-family:verdana;">Plagiarized Content: %@ViewBag.PlagiarizedContent</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.sentence)
+        </th>
+        <th>
+            @Html.DisplayName("Document ID")
+        </th>
+        <th>
+            @Html.DisplayName("Matched Sentence")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.sentence)
+        </td>
+        <td>
+            @Html.ActionLink(@item.documentId, "ManageDocument", new { id = item.matchedSentenceId})
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.matchedSentence)
+        </td>
+    </tr>
+}
+
+</table>

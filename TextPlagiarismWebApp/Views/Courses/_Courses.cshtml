@@ -1,0 +1,54 @@
+﻿@model IPagedList<Course>
+
+
+
+<div id="coursesList">
+    <div class="pagedList" data-courses-targert="#coursesList">
+        @Html.PagedListPager(Model, page => Url.Action("Index", new { page }),
+        PagedListRenderOptions.MinimalWithItemCountText)
+    </div>
+
+    <table class="table">
+        <tr>
+            <th>
+                @Html.DisplayName("Course ID")
+            </th>
+            <th>
+                @Html.DisplayName("Course Name")
+            </th>
+            <th>
+                @Html.DisplayName("Course Description")
+            </th>
+            <th>
+                @Html.DisplayName("Credit")
+            </th>
+            <th></th>
+        </tr>
+
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.courseId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.courseName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Hours)
+                </td>
+                <td style="width:180px; overflow:hidden">
+                    @Html.ActionLink("Edit", "Edit", new { id = item.courseId }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.courseId }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.courseId })
+
+                </td>
+            </tr>
+
+        }
+
+    </table>
+</div>

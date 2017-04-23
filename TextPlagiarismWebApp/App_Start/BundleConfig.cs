@@ -8,6 +8,18 @@ namespace TextPlagiarismWebApp
         // For more information on bundling, visit http://go.microsoft.com/fwlink/?LinkId=301862
         public static void RegisterBundles(BundleCollection bundles)
         {
+
+            bundles.Add(new ScriptBundle("~/bundles/mark").Include(
+                "~/Scripts/jquery-{version}.js",
+                "~/Scripts/jquery.mark.min.js",
+                "~/Scripts/mark.min.js"));
+
+            bundles.Add(new ScriptBundle("~/bundles/courses").Include(
+                "~/Scripts/jquery-{version}.js",
+                "~/Scripts/jquery-ui-{version}.js",
+                "~/Scripts/jquery.unobtrusive*",
+                "~/Scripts/jquery.validate*"));
+
             bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
                         "~/Scripts/jquery-{version}.js"));
 
@@ -26,6 +38,13 @@ namespace TextPlagiarismWebApp
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
                       "~/Content/site.css"));
+
+            bundles.Add(new ScriptBundle("~/bundles/dropzonescripts").Include(
+                      "~/Scripts/dropzone/dropzone.min.js"));
+
+            bundles.Add(new StyleBundle("~/Content/dropzonescss").Include(
+                     "~/Scripts/dropzone/css/basic.css",
+                     "~/Scripts/dropzone/css/dropzone.css"));
         }
     }
 }
