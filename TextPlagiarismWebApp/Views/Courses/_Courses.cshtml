@@ -29,7 +29,7 @@
         {
             <tr>
                 <td>
-                    @Html.DisplayFor(modelItem => item.courseId)
+                    @Html.ActionLink(item.courseId, "ManageCourse", new { id = item.courseId })
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.courseName)

@@ -160,5 +160,19 @@ namespace TextPlagiarismWebApp.Controllers
             }
             base.Dispose(disposing);
         }
+
+        public ActionResult ManageCourse (string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+            Course course = db.Courses.Find(id);
+            if (course == null)
+            {
+                return HttpNotFound();
+            }
+            return View(course);
+        }
     }
 }

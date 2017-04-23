@@ -397,6 +397,7 @@
     <Content Include="Views\Courses\Index.cshtml" />
     <Content Include="Views\Courses\_Courses.cshtml" />
     <Content Include="Views\Shared\AuthorizeFailed.cshtml" />
+    <Content Include="Views\Courses\ManageCourse.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
