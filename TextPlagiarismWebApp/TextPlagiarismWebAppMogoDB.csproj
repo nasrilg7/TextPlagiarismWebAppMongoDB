@@ -258,9 +258,11 @@
     <Compile Include="App_Start\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AnalyzeController.cs" />
+    <Compile Include="Controllers\AssignmentsController.cs" />
     <Compile Include="Controllers\CoursesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\SubmissionsController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="DataAccessLayer\CourseDB.cs" />
     <Compile Include="DataAccessLayer\PgContext.cs" />
@@ -277,6 +279,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Sentence.cs" />
+    <Compile Include="Models\ViewModels\AssignmentUserViewModel.cs" />
     <Compile Include="Models\ViewModels\DocumentsViewModel.cs" />
     <Compile Include="Models\ViewModels\ManageDocumentViewModel.cs" />
     <Compile Include="Models\ViewModels\SentenceMatchingViewModel.cs" />
@@ -391,9 +394,21 @@
     <Content Include="Views\Courses\Details.cshtml" />
     <Content Include="Views\Courses\Edit.cshtml" />
     <Content Include="Views\Courses\Index.cshtml" />
-    <Content Include="Views\Courses\_Courses.cshtml" />
     <Content Include="Views\Shared\AuthorizeFailed.cshtml" />
-    <Content Include="Views\Courses\ManageCourse.cshtml" />
+    <Content Include="Views\Assignments\Create.cshtml" />
+    <Content Include="Views\Assignments\Delete.cshtml" />
+    <Content Include="Views\Assignments\Details.cshtml" />
+    <Content Include="Views\Assignments\Edit.cshtml" />
+    <Content Include="Views\Assignments\Index.cshtml" />
+    <Content Include="Views\Submissions\Create.cshtml" />
+    <Content Include="Views\Submissions\Delete.cshtml" />
+    <Content Include="Views\Submissions\Details.cshtml" />
+    <Content Include="Views\Submissions\Edit.cshtml" />
+    <Content Include="Views\Submissions\Index.cshtml" />
+    <Content Include="Views\Courses\IndexStudent.cshtml" />
+    <Content Include="Views\Courses\IndexTeacher.cshtml" />
+    <Content Include="Views\Courses\MyIndexTeacher.cshtml" />
+    <Content Include="Views\Courses\MyIndexStudent.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

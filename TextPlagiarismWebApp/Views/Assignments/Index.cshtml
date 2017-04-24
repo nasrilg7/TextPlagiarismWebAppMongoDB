@@ -1,0 +1,64 @@
+﻿@model TextPlagiarismWebApp.Models.ViewModels.AssignmentUserViewModel
+
+@{
+    ViewBag.Title = "Manage Course";
+}
+
+<h2>@Model.Course.Id: @Model.Course.Name</h2>
+<h6>By @Model.Course.UserName</h6>
+
+<p></p>
+<p>
+    @Html.ActionLink("Create New Assignment Session »", "Create", new { id = Model.Course.Id})
+</p>
+<p></p>
+<p></p>
+
+<hr />
+<h4>Assignment Sessions</h4>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayName("Assignment Name")
+        </th>
+        <th>
+            @Html.DisplayName("Discription")
+        </th>
+        <th>
+            @Html.DisplayName("Time Due")
+        </th>
+        <th>
+            @Html.DisplayName("Weight")
+        </th>
+        <th>
+            @Html.DisplayName("Total Submissions")
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model.Assignments) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Description)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TimeDue)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Weight)
+        </td>
+        <td>
+            @Html.ActionLink(item.Submissions.Count + " Submissions", "ViewSubmission", new { id = item.Id })
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.Id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.Id })
+        </td>
+    </tr>
+}
+
+</table>

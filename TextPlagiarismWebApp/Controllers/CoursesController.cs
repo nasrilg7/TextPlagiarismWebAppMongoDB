@@ -10,17 +10,19 @@ using TextPlagiarismWebApp.DataAccessLayer;
 using TextPlagiarismWebApp.Models;
 using PagedList;
 using TextPlagiarismWebApp.Filter;
+using TextPlagiarismWebApp.Models.ViewModels;
 
 namespace TextPlagiarismWebApp.Controllers
 
 {
-    
+
+    [System.Runtime.InteropServices.Guid("7734F45F-B64D-4A9D-9264-20F725B981F3")]
     public class CoursesController : Controller
     {
         private CourseDB db = new CourseDB();
 
         // GET: Courses
-        public ActionResult Index(string searchTerm = null, int page =1)
+        public ActionResult Index(string searchTerm = null, int page = 1)
         {
             var model =
                 (from c in db.Courses
@@ -44,10 +46,210 @@ namespace TextPlagiarismWebApp.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_Coursec", model);
+                return PartialView("_Courses", model);
+            }
+
+            if(User.IsInRole("Teacher"))
+            {
+                return RedirectToAction("IndexTeacher");
+            }
+            else if(User.IsInRole("Student"))
+            {
+                return RedirectToAction("IndexStudent");
+            }
+            return View(model);
+
+        }
+        [Authorize]
+        public ActionResult MyIndex(string searchTerm = null, int page = 1)
+        {
+            var model =
+                (from c in db.Courses
+                 where searchTerm == null ||
+                 c.Id.StartsWith(searchTerm) ||
+                 c.Name.StartsWith(searchTerm)
+
+                 select new
+                 {
+                     courseId = c.Id,
+                     courseName = c.Name,
+                     description = c.Description,
+                     Hours = c.Hours
+                 }).AsEnumerable().Select(c => new Course
+                 {
+                     Id = c.courseId,
+                     Name = c.courseName,
+                     Description = c.description,
+                     Hours = c.Hours
+                 }).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+            {
+                //return PartialView("_Courses", model);
+            }
+
+            if (User.IsInRole("Teacher"))
+            {
+                return RedirectToAction("MyIndexTeacher", new { UserName = User.Identity.Name });
+            }
+            else
+            {
+                return RedirectToAction("MyIndexStudent", new { UserName = User.Identity.Name });
+            }
+
+
+        }
+        [Filter.Filter(Roles = "Student")]
+        public ActionResult IndexStudent(string searchTerm = null, int page = 1)
+        {
+            var model =
+                (from c in db.Courses
+                 where searchTerm == null ||
+                 c.Id.StartsWith(searchTerm) ||
+                 c.Name.StartsWith(searchTerm)
+
+                 select new
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+
+
+                 }).AsEnumerable().Select(c => new Course
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+                 }).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+            {
+                //return PartialView("_Courses", model);
             }
 
             return View(model);
+
+        }
+        [Filter.Filter(Roles = "Teacher")]
+        public ActionResult IndexTeacher(string searchTerm = null, int page = 1)
+        {
+            var model =
+                (from c in db.Courses
+                 where searchTerm == null ||
+                 c.Id.StartsWith(searchTerm) ||
+                 c.Name.StartsWith(searchTerm)
+
+                 select new
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+
+
+                 }).AsEnumerable().Select(c => new Course
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+                 }).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+            {
+                //return PartialView("_Courses", model);
+            }
+
+            return View(model);
+
+        }
+        [Filter.Filter(Roles = "Teacher")]
+        public ActionResult MyIndexTeacher(string UserName, string searchTerm = null, int page = 1)
+        {
+            if(User.Identity.Name != UserName)
+            {
+                return View("~/Views/Shared/Error.cshtml");
+            }
+            var model =
+                (from c in db.Courses
+                 where c.UserName == UserName &&
+                 searchTerm == null ||
+                 c.Id.StartsWith(searchTerm) ||
+                 c.Name.StartsWith(searchTerm)
+                 
+
+                 select new
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+
+
+                 }).AsEnumerable().Select(c => new Course
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+                 }).ToPagedList(page, 10);
+
+            if (Request.IsAjaxRequest())
+            {
+                //return PartialView("_Courses", model);
+            }
+
+            return View(model);
+
+        }
+
+        [Filter.Filter(Roles = "Student")]
+        public ActionResult MyIndexStudent(string UserName, string searchTerm = null, int page = 1)
+        {
+            if (User.Identity.Name != UserName)
+            {
+                return View("~/Views/Shared/Error.cshtml");
+            }
+            var model =
+                (from c in db.Courses
+                 where c.EnrolledStudentsEmails.Contains(UserName) &&
+                 searchTerm == null ||
+                 c.Id.StartsWith(searchTerm) ||
+                 c.Name.StartsWith(searchTerm)
+
+
+                 select new
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+
+
+                 }).AsEnumerable().Select(c => new Course
+                 {
+                     Id = c.Id,
+                     Name = c.Name,
+                     Description = c.Description,
+                     Hours = c.Hours,
+                     UserName = c.UserName
+                 }).ToPagedList(page, 10);
+            if (Request.IsAjaxRequest())
+            {
+                return PartialView("_Courses", model);
+            }
+
+            return View(model);
+
         }
 
         // GET: Courses/Details/5
@@ -79,10 +281,11 @@ namespace TextPlagiarismWebApp.Controllers
         [HttpPost]
         //[Filter.Filter(Roles = "admin, teacher")]
         [ValidateAntiForgeryToken]
-         public ActionResult Create([Bind(Include = "Id,Name,Description,Hours")] Course course)
+        public ActionResult Create([Bind(Include = "Id,Name,Description,Hours")] Course course)
         {
             if (ModelState.IsValid)
             {
+                course.UserName = User.Identity.Name;
                 db.Courses.Add(course);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -161,18 +364,44 @@ namespace TextPlagiarismWebApp.Controllers
             base.Dispose(disposing);
         }
 
-        public ActionResult ManageCourse (string id)
+
+        public ActionResult ManageCourse(string id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Course course = db.Courses.Find(id);
-            if (course == null)
-            {
-                return HttpNotFound();
-            }
-            return View(course);
+
+    
+            return RedirectToAction("Index", "Assignments", new { id = id });
         }
+        public ActionResult ManageAllCoursesStudent(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            if (false)
+            {
+                return RedirectToAction("StudentIndex", "Assignments", new { id = id });
+            }
+            
+            else{
+                return RedirectToAction("StudentIndexEnrolled", "Assignments", new { id = id });
+            }
+        }
+
+        public ActionResult ManageMyCoursesStudent(string id)
+        {
+            if (id == null)
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+
+            return RedirectToAction("Index", "Assignments", new { id = id });
+        }
+
     }
 }

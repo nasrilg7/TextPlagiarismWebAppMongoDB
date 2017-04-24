@@ -1,0 +1,58 @@
+﻿@model TextPlagiarismWebApp.Models.Submission
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Submission</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeSubmitted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeSubmitted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FeedBack)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FeedBack)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentName)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

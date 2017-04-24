@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using TextPlagiarismWebApp.Models;
+using Microsoft.AspNet.Identity.EntityFramework;
 
 namespace TextPlagiarismWebApp.Controllers
 {
@@ -153,14 +154,30 @@ namespace TextPlagiarismWebApp.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email }; 
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
+                    var roleStore = new RoleStore<IdentityRole>(context);
+                    var roleManager = new RoleManager<IdentityRole>(roleStore);
+
                     if (Char.IsLetter(user.UserName[0]) && user.Email.Split('@')[1].IndexOf("bethlehem.edu", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
+                        if(!roleManager.RoleExists("Teacher"))
+                        {
+                            await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
+                        }
                         //this means he's a teacher
-                        await UserManager.AddToRoleAsync(user.Id, "teacher");
+                        await UserManager.AddToRoleAsync(user.Id, "Teacher");
+                    }
+                    else
+                    {
+                        if (!roleManager.RoleExists("Student"))
+                        {
+                            await roleManager.CreateAsync(new IdentityRole { Name = "Student" });
+                        }
+                        //other means student
+                        await UserManager.AddToRoleAsync(user.Id, "Student");
                     }
                   
                    

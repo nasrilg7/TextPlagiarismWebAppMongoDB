@@ -14,6 +14,9 @@ namespace TextPlagiarismWebApp.DataAccessLayer
 
         }
 
-        public DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Assignment> Assignments { get; set; }
+        public virtual DbSet<Submission> Submissions { get; set; }
+
     }
 }

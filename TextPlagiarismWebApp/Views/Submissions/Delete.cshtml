@@ -1,0 +1,64 @@
+﻿@model TextPlagiarismWebApp.Models.Submission
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Submission</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.TimeSubmitted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TimeSubmitted)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FeedBack)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FeedBack)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.StudentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.StudentName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentURL)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentURL)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DocumentName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DocumentName)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
