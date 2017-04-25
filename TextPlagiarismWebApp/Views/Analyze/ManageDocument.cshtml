@@ -5,13 +5,22 @@
 }
 
 <h2>ManageDocument</h2>
+<script type="text/javascript" src="C:\Users\nasri\OneDrive\מסמכים\Visual Studio 2015\Projects\TextPlagiarismWebApp - Copy\TextPlagiarismWebApp\Scripts\jquery.highlight-5.js"></script>
 
-    @Html.Action("GetHtmlPage", "Upload", new { path = Model.documentPath })
 
-<script  type="text/javascript">
+@*<script  type="text/javascript">
     sen = @Model.sentence["sentence"].AsString.ToString();
     $("body").html(function (_, innerHTML) {
         var regex = new RegExp("(" + sen + ")", "g");
         return innerHTML.replace(/\s\s+/g, ' ').replace(/\r?\n|\r/g, '').replace(regex, '<span style="background-color:#FFFF00">$1</span>');
     });
+</script>*@
+@Html.Action("GetHtmlPage", "Upload", new { path = Model.documentPath })
+@{
+    var str = Model.sentence["sentence"].AsString;
+
+}
+<script type="text/javascript" src="C:\Users\nasri\OneDrive\מסמכים\Visual Studio 2015\Projects\TextPlagiarismWebApp - Copy\TextPlagiarismWebApp\Scripts\jquery.highlight-5.js">
+    $('body').highlight(@str);
 </script>
+

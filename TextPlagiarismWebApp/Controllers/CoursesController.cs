@@ -49,11 +49,11 @@ namespace TextPlagiarismWebApp.Controllers
                 return PartialView("_Courses", model);
             }
 
-            if(User.IsInRole("Teacher"))
+            if (User.IsInRole("Teacher"))
             {
                 return RedirectToAction("IndexTeacher");
             }
-            else if(User.IsInRole("Student"))
+            else if (User.IsInRole("Student"))
             {
                 return RedirectToAction("IndexStudent");
             }
@@ -172,7 +172,7 @@ namespace TextPlagiarismWebApp.Controllers
         [Filter.Filter(Roles = "Teacher")]
         public ActionResult MyIndexTeacher(string UserName, string searchTerm = null, int page = 1)
         {
-            if(User.Identity.Name != UserName)
+            if (User.Identity.Name != UserName)
             {
                 return View("~/Views/Shared/Error.cshtml");
             }
@@ -182,7 +182,7 @@ namespace TextPlagiarismWebApp.Controllers
                  searchTerm == null ||
                  c.Id.StartsWith(searchTerm) ||
                  c.Name.StartsWith(searchTerm)
-                 
+
 
                  select new
                  {
@@ -220,7 +220,7 @@ namespace TextPlagiarismWebApp.Controllers
             }
             var model =
                 (from c in db.Courses
-                 where c.EnrolledStudentsEmails.Contains(UserName) &&
+                 where //c.EnrolledStudentsEmails.Contains(User.Identity) &&
                  searchTerm == null ||
                  c.Id.StartsWith(searchTerm) ||
                  c.Name.StartsWith(searchTerm)
@@ -243,9 +243,10 @@ namespace TextPlagiarismWebApp.Controllers
                      Hours = c.Hours,
                      UserName = c.UserName
                  }).ToPagedList(page, 10);
+
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_Courses", model);
+                //return PartialView("_Courses", model);
             }
 
             return View(model);
@@ -372,7 +373,7 @@ namespace TextPlagiarismWebApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-    
+
             return RedirectToAction("Index", "Assignments", new { id = id });
         }
         public ActionResult ManageAllCoursesStudent(string id)
@@ -382,12 +383,13 @@ namespace TextPlagiarismWebApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
-            if (false)
+            if (false)// if student is enrolled
             {
                 return RedirectToAction("StudentIndex", "Assignments", new { id = id });
             }
-            
-            else{
+
+            else
+            {
                 return RedirectToAction("StudentIndexEnrolled", "Assignments", new { id = id });
             }
         }
