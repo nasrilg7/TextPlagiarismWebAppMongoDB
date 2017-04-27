@@ -12,13 +12,16 @@ namespace TextPlagiarismWebApp.Controllers
 {
     public class UploadController : Controller
     {
-        public ActionResult UploadDocument()
+        [Filter.Filter(Roles = "Student")]
+        public ActionResult UploadDocument(string id)
         {
+            ViewBag.SubmissionID = id;
             return View();
         }
 
         [HttpPost]
-        public ActionResult Upload()
+        [Filter.Filter(Roles = "Student")]
+        public ActionResult Upload(string id)
         {
             bool isSavedSuccessfully = true;
             string fName = string.Empty;
@@ -62,23 +65,52 @@ namespace TextPlagiarismWebApp.Controllers
             {
                 DocumentsLayer dl = DocumentsLayer.getInstance();
                 Models.Document document = new Models.Document();
-                var sentencesText = readSentences(path, document.Id);
+                //var sentencesText = readSentences(path, document.Id);
                 ConvertToHtml(path, WdSaveFormat.wdFormatHTML);
                 var documentText = readDocument(path);
 
                 document.document = documentText;
-                document.path = path.Replace(".doc", ".html");
+                document.path = path.Replace(".docx", ".html");
                 dl.insertDocument(document);
-                dl.setSentences(sentencesText);
+                //dl.setSentences(sentencesText);
                 ViewBag.Document = documentText;
                 ViewBag.Name = fName;
-                return View(document);
+
+                var db = new ApplicationDbContext();
+                var submission = db.Submissions.Find(id);
+                submission.DocumentName = fName;
+                submission.DocumentURL = document.path;
+                submission.StudentName = User.Identity.Name;
+                submission.TimeSubmitted = DateTime.Now.ToString("dd/MM/yyyy");
+                submission.DocumentMongoDBID = document.Id.ToString();
+                var assingment = db.Assignments.Find(submission.Assignment.Id);
+                assingment.Submissions.Add(submission);
+                db.SaveChanges();
+                return RedirectToAction("ShowDocumentStudent", new { name = fName, path = document.path});
 
             }
             else
             {
                 return Json(new { Message = "Error in saving file" });
             }
+        }
+
+        [Filter.Filter(Roles = "Student")]
+        public ActionResult ShowDocumentStudent(string name, string path)
+        {
+            ViewBag.Name = name;
+            ViewBag.Path = path;
+            return View();
+        }
+
+        [Filter.Filter(Roles = "Teacher")]
+        public ActionResult ShowDocumentTeacher(string name,string sname, string id, string path)
+        {
+            ViewBag.Name = name;
+            ViewBag.Path = path;
+            ViewBag.SName = sname;
+            ViewBag.DocumentMongoDBID = id;
+            return View();
         }
 
         [ChildActionOnly]
@@ -107,7 +139,7 @@ namespace TextPlagiarismWebApp.Controllers
                 try
                 {
                     doc.Activate();
-                    object outputFileName = wordFile.FullName.Replace(".doc", ".html");
+                    object outputFileName = wordFile.FullName.Replace(".docx", ".html");
                     object fileFormat = format;
                     doc.SaveAs(ref outputFileName,
                                ref fileFormat, ref oMissing, ref oMissing,

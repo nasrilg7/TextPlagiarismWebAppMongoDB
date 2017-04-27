@@ -6,6 +6,7 @@
 
 <h2>@Model.Course.Id: @Model.Course.Name</h2>
 <h6>By @Model.Course.UserName</h6>
+<h4>@Model.Course.ApplicationUsers.Count Students Enrolled</h4>
 
 <p></p>
 <p>
@@ -50,8 +51,9 @@
         <td>
             @Html.DisplayFor(modelItem => item.Weight)
         </td>
+
         <td>
-            @Html.ActionLink(item.Submissions.Count + " Submissions", "ViewSubmission", new { id = item.Id })
+            @Html.ActionLink(item.Submissions.Count() +" Submissions", "ViewSubmission", new { id = item.Id })
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.Id }) |

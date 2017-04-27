@@ -10,7 +10,7 @@ namespace TextPlagiarismWebApp.Models
         public Course()
         {
             Assignments = new HashSet<Assignment>();
-            EnrolledStudentsEmails = new HashSet<ApplicationUser>();
+            ApplicationUsers = new HashSet<ApplicationUser>();
         }
 
         [Key]
@@ -23,7 +23,7 @@ namespace TextPlagiarismWebApp.Models
         public int Hours { get; set; }
 
         public ICollection<Assignment> Assignments { get; set; }
-        public ICollection<ApplicationUser> EnrolledStudentsEmails { get; set; }
+        public virtual ICollection<ApplicationUser> ApplicationUsers { get; set; }
         public string UserName{ get; set; }
 
     }
@@ -62,6 +62,7 @@ namespace TextPlagiarismWebApp.Models
 
         public string DocumentURL { get; set; }
         public string DocumentName { get; set; }
+        public string DocumentMongoDBID { get; set; }
 
         public virtual Assignment Assignment { get; set; }
     }

@@ -19,7 +19,7 @@ namespace TextPlagiarismWebApp.Controllers
     [System.Runtime.InteropServices.Guid("7734F45F-B64D-4A9D-9264-20F725B981F3")]
     public class CoursesController : Controller
     {
-        private CourseDB db = new CourseDB();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Courses
         public ActionResult Index(string searchTerm = null, int page = 1)
@@ -46,7 +46,7 @@ namespace TextPlagiarismWebApp.Controllers
 
             if (Request.IsAjaxRequest())
             {
-                return PartialView("_Courses", model);
+                //return PartialView("_Courses", model);
             }
 
             if (User.IsInRole("Teacher"))
@@ -220,7 +220,7 @@ namespace TextPlagiarismWebApp.Controllers
             }
             var model =
                 (from c in db.Courses
-                 where //c.EnrolledStudentsEmails.Contains(User.Identity) &&
+                 where c.ApplicationUsers.Any(e => e.Email == UserName)&&
                  searchTerm == null ||
                  c.Id.StartsWith(searchTerm) ||
                  c.Name.StartsWith(searchTerm)
@@ -269,8 +269,7 @@ namespace TextPlagiarismWebApp.Controllers
             return View(course);
         }
 
-        // GET: Courses/Create
-        //[Filter.Filter(Roles = "admin, teacher")]
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Create()
         {
             return View();
@@ -296,7 +295,7 @@ namespace TextPlagiarismWebApp.Controllers
         }
 
         // GET: Courses/Edit/5
-        //[Filter.Filter(Roles = "admin, owner")]
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -329,7 +328,7 @@ namespace TextPlagiarismWebApp.Controllers
         }
 
         // GET: Courses/Delete/5
-        //[Filter.Filter(Roles = "admin, owner")]
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -346,7 +345,7 @@ namespace TextPlagiarismWebApp.Controllers
 
         // POST: Courses/Delete/5
         [HttpPost, ActionName("Delete")]
-        //[Filter.Filter(Roles = "admin, owner")]
+        [Filter.Filter(Roles = "Teacher")]
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(string id)
         {
@@ -365,7 +364,7 @@ namespace TextPlagiarismWebApp.Controllers
             base.Dispose(disposing);
         }
 
-
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult ManageCourse(string id)
         {
             if (id == null)
@@ -376,34 +375,42 @@ namespace TextPlagiarismWebApp.Controllers
 
             return RedirectToAction("Index", "Assignments", new { id = id });
         }
+
+        [Filter.Filter(Roles = "Student")]
         public ActionResult ManageAllCoursesStudent(string id)
         {
+            //view of all courses
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-
-            if (false)// if student is enrolled
+            Course course = db.Courses.Find(id); //return the course
+            var studentsEnrolled = course.ApplicationUsers.ToList();
+            if (studentsEnrolled.Any(s => s.Email == User.Identity.Name))
             {
-                return RedirectToAction("StudentIndex", "Assignments", new { id = id });
+                return RedirectToAction("StudentIndexEnrolled", "Assignments", new { id = id });
             }
 
             else
             {
-                return RedirectToAction("StudentIndexEnrolled", "Assignments", new { id = id });
+                return RedirectToAction("StudentIndexToEnroll", "Assignments", new { id = id });
             }
         }
-
+        [Filter.Filter(Roles = "Student")]
         public ActionResult ManageMyCoursesStudent(string id)
         {
+            //View of the course that the student is enrolled in
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
 
 
-            return RedirectToAction("Index", "Assignments", new { id = id });
+            return RedirectToAction("StudentIndexEnrolled", "Assignments", new { id = id });
         }
+
+
+        
 
     }
 }

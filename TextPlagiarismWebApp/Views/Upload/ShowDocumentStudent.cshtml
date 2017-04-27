@@ -1,0 +1,11 @@
+﻿@model TextPlagiarismWebApp.Models.Document
+@{
+    ViewBag.Title = "Document";
+}
+
+<h2>@ViewBag.Title: @ViewBag.Name</h2>
+
+<br />
+<br />
+@Html.Action("GetHtmlPage", "Upload", new { path = ViewBag.Path })
+

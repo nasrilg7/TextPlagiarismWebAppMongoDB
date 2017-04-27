@@ -13,15 +13,21 @@ namespace TextPlagiarismWebApp.Controllers
 {
     public class SubmissionsController : Controller
     {
-        private CourseDB db = new CourseDB();
+        private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Submissions
-        public ActionResult Index()
+        [Filter.Filter(Roles = "Teacher")]
+        public ActionResult Index(string id)
         {
-            return View(db.Submissions.ToList());
+            var submissions = db.Submissions
+                .Where(s => s.Assignment.Id == id && !string.IsNullOrEmpty(s.DocumentName))
+                .Distinct()
+                .ToList();
+            return View(submissions);
         }
 
         // GET: Submissions/Details/5
+        [Filter.Filter(Roles = "Student")]
         public ActionResult Details(string id)
         {
             if (id == null)
@@ -33,10 +39,12 @@ namespace TextPlagiarismWebApp.Controllers
             {
                 return HttpNotFound();
             }
+            
             return View(submission);
         }
 
         // GET: Submissions/Create
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Create()
         {
             return View();
@@ -47,6 +55,7 @@ namespace TextPlagiarismWebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Create([Bind(Include = "Id,TimeSubmitted,FeedBack,StudentName,DocumentURL,DocumentName")] Submission submission)
         {
             if (ModelState.IsValid)
@@ -60,6 +69,7 @@ namespace TextPlagiarismWebApp.Controllers
         }
 
         // GET: Submissions/Edit/5
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Edit(string id)
         {
             if (id == null)
@@ -79,6 +89,7 @@ namespace TextPlagiarismWebApp.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Edit([Bind(Include = "Id,TimeSubmitted,FeedBack,StudentName,DocumentURL,DocumentName")] Submission submission)
         {
             if (ModelState.IsValid)
@@ -91,6 +102,7 @@ namespace TextPlagiarismWebApp.Controllers
         }
 
         // GET: Submissions/Delete/5
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Delete(string id)
         {
             if (id == null)
@@ -108,6 +120,7 @@ namespace TextPlagiarismWebApp.Controllers
         // POST: Submissions/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult DeleteConfirmed(string id)
         {
             Submission submission = db.Submissions.Find(id);
@@ -123,6 +136,39 @@ namespace TextPlagiarismWebApp.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        [Filter.Filter(Roles = "Student")]
+        public ActionResult UploadSubmission(string id)
+        {
+            Submission submission = new Submission();
+            submission.Id = generateID();
+            submission.Assignment = db.Assignments.Find(id);
+            db.Submissions.Add(submission);
+            db.SaveChanges();
+            return RedirectToAction("UploadDocument", "Upload", new { id = submission.Id });
+        }
+
+        // POST: Submissions/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+
+        public ActionResult DisplayDocument(string id)
+        {
+            var submission = db.Submissions.Find(id);
+
+            return RedirectToAction("ShowDocumentTeacher", "Upload", new { name = submission.DocumentName, sname = submission.StudentName, id = submission.DocumentMongoDBID, path = submission.DocumentURL});
+        }
+
+
+        private string generateID()
+        {
+            Guid g = Guid.NewGuid();
+            string GuidString = Convert.ToBase64String(g.ToByteArray());
+            GuidString = GuidString.Replace("=", "");
+            GuidString = GuidString.Replace("+", "");
+            GuidString = GuidString.Replace(@"\", "");
+            GuidString = GuidString.Replace(@"/", "");
+            return GuidString;
         }
     }
 }

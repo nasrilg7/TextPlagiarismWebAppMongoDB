@@ -7,23 +7,23 @@
 <h2>Courses</h2>
 
 @*<form method="GET">
-    <input type="search" name="searchTerm" />
-    <input type="submit" value="Search Courses" />
-</form>*@
+        <input type="search" name="searchTerm" />
+        <input type="submit" value="Search Courses" />
+    </form>*@
 
 @using (Ajax.BeginForm(
-                new AjaxOptions
-                {
-                    HttpMethod = "get",
-                    InsertionMode = InsertionMode.Replace,
-                    UpdateTargetId = "coursesList"
-                }))
+                            new AjaxOptions
+                            {
+                                HttpMethod = "get",
+                                InsertionMode = InsertionMode.Replace,
+                                UpdateTargetId = "coursesList"
+                            }))
 {
     <input type="search" name="searchTerm" />
     <input type="submit" value="Search Courses" />
 }
 
-<p><p></p><a href= @Url.Action("Create", "Courses") class="btn btn-primary btn-lg">Create New »</a></p>
+<p><p></p><a href=@Url.Action("Create", "Courses") class="btn btn-primary btn-lg">Create New »</a></p>
 
 
 <div id="coursesList">

@@ -160,22 +160,24 @@ namespace TextPlagiarismWebApp.Controllers
                 {
                     var roleStore = new RoleStore<IdentityRole>(context);
                     var roleManager = new RoleManager<IdentityRole>(roleStore);
+                    if (!roleManager.RoleExists("Teacher"))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
+                    }
+                    if (!roleManager.RoleExists("Student"))
+                    {
+                        await roleManager.CreateAsync(new IdentityRole { Name = "Student" });
+                    }
 
                     if (Char.IsLetter(user.UserName[0]) && user.Email.Split('@')[1].IndexOf("bethlehem.edu", StringComparison.OrdinalIgnoreCase) >= 0)
                     {
-                        if(!roleManager.RoleExists("Teacher"))
-                        {
-                            await roleManager.CreateAsync(new IdentityRole { Name = "Teacher" });
-                        }
+                        
                         //this means he's a teacher
                         await UserManager.AddToRoleAsync(user.Id, "Teacher");
                     }
                     else
                     {
-                        if (!roleManager.RoleExists("Student"))
-                        {
-                            await roleManager.CreateAsync(new IdentityRole { Name = "Student" });
-                        }
+                        
                         //other means student
                         await UserManager.AddToRoleAsync(user.Id, "Student");
                     }

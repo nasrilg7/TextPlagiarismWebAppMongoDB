@@ -151,7 +151,8 @@ namespace TextPlagiarismWebApp.Models
 
             //    return matchedSentencesList;
             var dl = getInstance();
-            var allSentencesInThatDocument = dl.getSentences();
+            var did = new ObjectId(id);
+            var allSentencesInThatDocument = readSentences(path, did);
             var matchedSentencesList = new List<SentenceMatchingViewModel>();
             documentSentencesCount = allSentencesInThatDocument.Count;
             foreach (var sentenceInDocument in allSentencesInThatDocument)
@@ -185,7 +186,7 @@ namespace TextPlagiarismWebApp.Models
                 
             }
 
-            dl.insertSentences(testedSentences);
+            dl.insertSentences(allSentencesInThatDocument);
             return matchedSentencesList;
         }
         public int getDocumentSentencesCount()
@@ -279,6 +280,28 @@ namespace TextPlagiarismWebApp.Models
 
             var sentence_collection = dl.getDatabase().GetCollection<BsonDocument>("sentences");
             return sentence_collection;
+
+        }
+        private static List<Sentence> readSentences(string filePath, ObjectId did)
+        {
+            Microsoft.Office.Interop.Word.Application word = new Microsoft.Office.Interop.Word.Application();
+            object miss = System.Reflection.Missing.Value;
+            object path = @"" + filePath;
+            object readOnly = true;
+            Microsoft.Office.Interop.Word.Document docs = word.Documents.Open(ref path, ref miss, ref readOnly, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss, ref miss);
+            List<Sentence> sentencesList = new List<Sentence>();
+            for (int i = 0; i < docs.Sentences.Count; i++)
+            {
+                Sentence sen = new Sentence();
+                sen.sentence = docs.Sentences[i + 1].Text.ToString();
+                sen.path = filePath;
+                sen.DID = did;
+                sentencesList.Add(sen);
+            }
+            docs.Close();
+            word.Quit();
+            return sentencesList;
+
 
         }
     }

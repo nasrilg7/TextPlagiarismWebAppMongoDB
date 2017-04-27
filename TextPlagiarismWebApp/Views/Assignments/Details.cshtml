@@ -1,42 +1,43 @@
 ﻿@model TextPlagiarismWebApp.Models.Assignment
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "AssignmentDetails";
 }
 
-<h2>Details</h2>
+<h2>@Model.Name</h2>
 
 <div>
-    <h4>Assignment</h4>
+    <h4>@Model.Description</h4>
+    <h5>@Model.TimeCreated</h5>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.Name)
+            @Html.DisplayName("Time Due:")
         </dt>
-
         <dd>
-            @Html.DisplayFor(model => model.Name)
+            @Html.DisplayFor(model => model.TimeDue)
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.Description)
+            @Html.DisplayName("Weight:")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Description)
+            @Html.DisplayName(@Model.Weight +"%")
         </dd>
-
         <dt>
-            @Html.DisplayNameFor(model => model.TimeCreated)
+            @Html.DisplayName("Total Submissions:")
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.TimeCreated)
+            @Html.DisplayName(Model.Submissions.Count() + " Submission")
         </dd>
+
+        <p>
+        <p></p>
+        <a href=@Url.Action("UploadSubmission", "Submissions" , new { id = Model.Id }) class="btn btn-primary btn-lg">Submit »</a></p>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

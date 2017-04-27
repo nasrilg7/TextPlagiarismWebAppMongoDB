@@ -11,6 +11,7 @@ namespace TextPlagiarismWebApp.Controllers
 {
     public class AnalyzeController : Controller
     {
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult Analyze(string id, string path)
         {
             DocumentsLayer dl = DocumentsLayer.getInstance();
@@ -24,13 +25,14 @@ namespace TextPlagiarismWebApp.Controllers
 
             return View(sentences);
         }
-
+        [Filter.Filter(Roles = "Teacher")]
         public ActionResult ManageDocument(string id)
         {
             DocumentsLayer dl = DocumentsLayer.getInstance();
             var manageDocumentViewModel = new ManageDocumentViewModel();
             manageDocumentViewModel.sentence = dl.getSentenceBySentenceId(id);
-            manageDocumentViewModel.documentPath = manageDocumentViewModel.sentence["document_path"].AsString.ToString().Replace(".doc", ".html");
+            manageDocumentViewModel.documentPath = manageDocumentViewModel.sentence["document_path"].AsString.ToString().Replace(".docx", ".html");
+            ViewBag.Sentence = manageDocumentViewModel.sentence["sentence"].AsString.ToString();
             return View(manageDocumentViewModel);
             
         }

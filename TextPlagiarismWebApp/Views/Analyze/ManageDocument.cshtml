@@ -2,25 +2,80 @@
 
 @{
     ViewBag.Title = "ManageDocument";
+    //ViewBag.Sentence = "When you click Online Video, you can paste in the embed code for the video you";
 }
 
 <h2>ManageDocument</h2>
-<script type="text/javascript" src="C:\Users\nasri\OneDrive\מסמכים\Visual Studio 2015\Projects\TextPlagiarismWebApp - Copy\TextPlagiarismWebApp\Scripts\jquery.highlight-5.js"></script>
+<script type="text/javascript">
+    var highlights = []
+    function searchElement(elem, word) {
+        var children = Array.prototype.slice.call(elem.childNodes);
+        for (var i = 0; i < children.length; i++) {
+            if (children[i].nodeType == Node.TEXT_NODE) {
+                var n = children[i];
+                var match_pos = n.nodeValue.indexOf(word);
+                if (match_pos == -1) {
+                    continue;
+                }
+                var before = n.nodeValue.substr(0, match_pos);// split into a part before the match
+                var middle = n.nodeValue.substr(match_pos, word.length); // the matched word to preserve case
+                var after = document.createTextNode(n.nodeValue.substr(match_pos + word.length));// and the part after the match
+                var highlight_span = document.createElement("span");// create a span in the middle
+                highlight_span.style.backgroundColor = "yellow";
+                highlight_span.appendChild(document.createTextNode(middle));// insert word as textNode in new span
+                n.nodeValue = before; // Turn node data into before
+                n.parentNode.insertBefore(after, n.nextSibling); // insert after
+                n.parentNode.insertBefore(highlight_span, n.nextSibling); // insert new span
+                highlights.push(highlight_span);
+                highlight_span.id = "highlight_span" + highlights.length;
+            } else if (children[i].childNodes.length) {
+                searchElement(children[i], word);
+            }
+        }
+    }
+    function highlight(word) {
 
+        searchElement(document.body, word)
+    }
+    function go(words){
+        var index;
+        for (index = 0; index < words.length; ++index) {
+            highlight(words[index]);
+        }
+    }
 
-@*<script  type="text/javascript">
-    sen = @Model.sentence["sentence"].AsString.ToString();
-    $("body").html(function (_, innerHTML) {
-        var regex = new RegExp("(" + sen + ")", "g");
-        return innerHTML.replace(/\s\s+/g, ' ').replace(/\r?\n|\r/g, '').replace(regex, '<span style="background-color:#FFFF00">$1</span>');
-    });
-</script>*@
+    
+</script>
 @Html.Action("GetHtmlPage", "Upload", new { path = Model.documentPath })
+
 @{
-    var str = Model.sentence["sentence"].AsString;
+    var original1 = Model.sentence["sentence"].AsString.ToString();
+    for (int i = original1.Length-2; i >0 ; i--)
+    {
+
+        <script type="text/javascript">
+            highlight('@original1.Substring(0,i)');
+        </script>
+
+    }
+    for (int i = 1; i < original1.Length; i++)
+    {
+        <script type="text/javascript">
+            highlight('@original1.Substring(0, original1.Length -2)');
+        </script>
+    }
+
+
+
+
+
 
 }
-<script type="text/javascript" src="C:\Users\nasri\OneDrive\מסמכים\Visual Studio 2015\Projects\TextPlagiarismWebApp - Copy\TextPlagiarismWebApp\Scripts\jquery.highlight-5.js">
-    $('body').highlight(@str);
-</script>
+
+
+
+
+
+
+
 

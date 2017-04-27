@@ -3,19 +3,32 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace TextPlagiarismWebApp.Models
 {
     // You can add profile data for the user by adding more properties to your ApplicationUser class, please visit http://go.microsoft.com/fwlink/?LinkID=317594 to learn more.
     public class ApplicationUser : IdentityUser
     {
+        public ApplicationUser(){
+
+            Courses = new HashSet<Course>();
+        }
+
+
+        public virtual ICollection<Course> Courses { get; set; }
         public async Task<ClaimsIdentity> GenerateUserIdentityAsync(UserManager<ApplicationUser> manager)
         {
             // Note the authenticationType must match the one defined in CookieAuthenticationOptions.AuthenticationType
             var userIdentity = await manager.CreateIdentityAsync(this, DefaultAuthenticationTypes.ApplicationCookie);
             // Add custom user claims here
             return userIdentity;
+
+
         }
+
+
     
     }
 
@@ -30,5 +43,11 @@ namespace TextPlagiarismWebApp.Models
         {
             return new ApplicationDbContext();
         }
+        //public DbSet<IdentityUserLogin> UserLogins { get; set; }
+        //public DbSet<IdentityUserClaim> UserClaims { get; set; }
+        //public DbSet<IdentityUserRole> UserRoles { get; set; }
+        public virtual DbSet<Course> Courses { get; set; }
+        public virtual DbSet<Assignment> Assignments { get; set; }
+        public virtual DbSet<Submission> Submissions { get; set; }
     }
 }

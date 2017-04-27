@@ -5,7 +5,7 @@
 
 
 <div class="jumbotron">
-    <form action="~/Upload/Upload" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
+    <form action="~/Upload/Upload/@ViewBag.SubmissionID" method="post" enctype="multipart/form-data" class="dropzone" id="dropzoneForm">
         <div class="fallback">
             <input name="file" type="file" multiple />
             <input type="submit" value="Upload" />

@@ -56,6 +56,9 @@
       <HintPath>..\packages\EntityFramework6.Npgsql.3.1.1\lib\net45\EntityFramework6.Npgsql.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="GroupDocs.Viewer">
+      <HintPath>..\..\..\..\Bethlehem University\Final Year Project\docs viewer libs\bin\GroupDocs.Viewer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=2.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.2.0.7\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -264,7 +267,6 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\SubmissionsController.cs" />
     <Compile Include="Controllers\UploadController.cs" />
-    <Compile Include="DataAccessLayer\CourseDB.cs" />
     <Compile Include="DataAccessLayer\PgContext.cs" />
     <Compile Include="Filter\FilterAttribute.cs" />
     <Compile Include="Global.asax.cs">
@@ -329,6 +331,7 @@
     <Content Include="Scripts\dropzone\dropzone.min.js" />
     <Content Include="Scripts\dropzone\images\spritemap%402x.png" />
     <Content Include="Scripts\dropzone\images\spritemap.png" />
+    <Content Include="Scripts\find5.js" />
     <Content Include="Scripts\html5.js" />
     <Content Include="Scripts\ie_png.js" />
     <Content Include="Scripts\jquery-1.4.2.min.js" />
@@ -348,6 +351,7 @@
     <Content Include="Scripts\respond.matchmedia.addListener.js" />
     <Content Include="Scripts\respond.matchmedia.addListener.min.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\jquery.highlight-5.js" />
     <Content Include="Scripts\script.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config" />
@@ -386,7 +390,7 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Home\getDocuments.cshtml" />
     <Content Include="Views\Upload\UploadDocument.cshtml" />
-    <Content Include="Views\Upload\Upload.cshtml" />
+    <Content Include="Views\Upload\ShowDocument.cshtml" />
     <Content Include="Views\Analyze\Analyze.cshtml" />
     <Content Include="Views\Analyze\ManageDocument.cshtml" />
     <Content Include="Views\Courses\Create.cshtml" />
@@ -409,6 +413,10 @@
     <Content Include="Views\Courses\IndexTeacher.cshtml" />
     <Content Include="Views\Courses\MyIndexTeacher.cshtml" />
     <Content Include="Views\Courses\MyIndexStudent.cshtml" />
+    <Content Include="Views\Assignments\StudentIndexToEnroll.cshtml" />
+    <Content Include="Views\Assignments\StudentIndexEnrolled.cshtml" />
+    <Content Include="Views\Upload\ShowDocumentStudent.cshtml" />
+    <Content Include="Views\Upload\ShowDocumentTeacher.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

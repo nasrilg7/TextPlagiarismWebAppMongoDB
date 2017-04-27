@@ -1,0 +1,16 @@
+﻿@model  TextPlagiarismWebApp.Models.Course
+
+@{
+    ViewBag.Title = "Enroll in this course";
+}
+
+<h2>@Model.Id: @Model.Name</h2>
+<h5>By @Model.UserName</h5>
+
+<hr />
+<div>
+    <h3>You must be enrolled in this course to see its Content</h3>
+    <p><p></p><a href=@Url.Action("EnrollStudent", "Assignments" , new { id = Model.Id }) class="btn btn-primary btn-lg">Enroll »</a></p>
+</div>
+
+

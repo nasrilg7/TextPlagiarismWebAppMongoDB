@@ -22,6 +22,12 @@ namespace TextPlagiarismWebApp
                 name: "AssignmentRoute",
                 url: "Assignment/Index/{id}"
                 );
+
+            //routes.MapRoute(
+            //    name: "AssignmentSubmissionRoute",
+            //    url: "{controller}/{action}/{cid}/{aid}",
+            //    defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
+            //);
         }
     }
 }
